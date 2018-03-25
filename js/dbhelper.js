@@ -149,7 +149,10 @@ class DBHelper {
   /**
    * Restaurant image URL.
    */
-  static imageUrlForRestaurant(restaurant) {
+  static imageUrlForRestaurant(restaurant, size) {
+    //If it asks for a different size, show that size
+    if(size)restaurant.photograph = restaurant.photograph.replace(/.jpg/, `_${size}.jpg`);
+
     return (`/img/${restaurant.photograph}`);
   }
 

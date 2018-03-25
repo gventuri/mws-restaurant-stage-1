@@ -57,7 +57,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  let image_lg = DBHelper.imageUrlForRestaurant(restaurant);
+  let image_sm = DBHelper.imageUrlForRestaurant(restaurant, "sm");
+
+  image.src = image_sm;
+  image.setAttribute("srcset", `${image_lg} 800w, ${image_sm} 300w`);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -117,21 +121,30 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  const name = document.createElement('p');
+  const name = document.createElement('h4');
   name.innerHTML = review.name;
+  name.className = "review-author";
   li.appendChild(name);
+
+  const revBody = document.createElement('div');
+  revBody.className = "review-body";
+  li.appendChild(revBody);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
-  li.appendChild(date);
+  revBody.appendChild(date);
 
   const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
-  li.appendChild(rating);
+  let stars = '';
+  for(let i = 0; i < review.rating; i++){
+    stars += "&#9733; ";
+  }
+  rating.innerHTML = `<div class='review-stars' aria-label="Rating from ${review.name}: ${review.rating} stars">${stars}</div>`;
+  revBody.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
-  li.appendChild(comments);
+  revBody.appendChild(comments);
 
   return li;
 }
