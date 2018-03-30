@@ -62,6 +62,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   image.src = image_sm;
   image.setAttribute("srcset", `${image_lg} 800w, ${image_sm} 300w`);
+  image.setAttribute("alt", `Photo of the restaurant "${name.innerHTML}"`);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -99,7 +100,8 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h4');
+  title.className += " h2";
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -155,6 +157,7 @@ createReviewHTML = (review) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
+  li.setAttribute("aria-current", "page")
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
 }

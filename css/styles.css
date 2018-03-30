@@ -163,7 +163,7 @@ nav h1 a {
   margin: 0;
   width: 100%;
 }
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #f18200;
   font-family: Arial,sans-serif;
   font-size: 14pt;
@@ -267,11 +267,12 @@ nav h1 a {
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 87%;
+  height: 91%;
   position: fixed;
   right: 0;
   top: 75px;
   width: 50%;
+	z-index: 1000;
 }
 .inside #map {
   background-color: #ccc;
@@ -321,7 +322,7 @@ nav h1 a {
 #reviews-container {
   padding: 30px 40px 80px;
 }
-#reviews-container h2 {
+#reviews-container h2, #reviews-container .h2 {
   color: #f58500;
   font-size: 24pt;
   font-weight: 300;
@@ -368,7 +369,7 @@ nav h1 a {
 
 
 /** RESPONSIVE RESTAURANT PAGE **/
-@media screen and (max-width: 840px){
+@media screen and (max-width: 980px){
 	#breadcrumb{
 		width: 100%;
 	}
@@ -388,7 +389,7 @@ nav h1 a {
 		width: 100%;
 	}
 }
-@media screen and (max-width: 670px){
+@media screen and (max-width: 750px){
 	#restaurant-container, #reviews-container{
 		float: none;
 		width: 100%;
