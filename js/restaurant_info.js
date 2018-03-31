@@ -1,6 +1,18 @@
 let restaurant;
 var map;
 
+/*** Register service workers ***/
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register("sw.js").then(function(registration){
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function(err){
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+/*** ./register service workers ***/
+
 /**
  * Initialize Google map, called from HTML.
  */

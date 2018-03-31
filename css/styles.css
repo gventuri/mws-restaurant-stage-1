@@ -377,6 +377,7 @@ nav h1 a {
 		position: relative;
 		width: 100%;
 		height: 40vh;
+		top: 125px;
 	}
 
 	#restaurant-container, #reviews-container{
