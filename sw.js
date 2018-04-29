@@ -6,7 +6,6 @@ var urlsToCache = [
   '/js/dbhelper.js',
   '/restaurant.html',
   '/css/styles.css',
-  '/data/restaurants.json',
   'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2',
   'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
   '/img/1.jpg',
