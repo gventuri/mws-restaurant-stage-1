@@ -1,3 +1,58 @@
+/*** IndexedDB ***/
+window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+
+if(!window.indexedDB){
+  console.log("This browser doesn't support IndexedDB");
+}
+
+var db;
+var request = window.indexedDB.open("MyDatabase", 1);
+
+request.onerror = function(event) {
+  console.log("Error connecting to the db");
+};
+
+request.onupgradeneeded = function(event){
+  var db = event.target.result;
+  var objectStore = db.createObjectStore("restaurants", {keyPath: "name"});
+
+  fetch(DBHelper.DATABASE_URL).then(function(res){
+    if (res.status === 200) { // Got a success response from server!
+      return res.json();
+    } else { // Oops!. Got an error from server.
+      const error = (`Request failed. Returned status of ${res.status}`);
+      callback(error, null);
+    }
+  }).then(function(res){
+    const restaurants = res;
+
+    for(res in restaurants){
+      add2DB(restaurants[res], db);
+    }
+
+    //Fix problem with google maps for
+    location.reload();
+  });
+}
+
+function add2DB(restaurant, db){
+  var request = db.transaction(["restaurants"], "readwrite")
+    .objectStore("restaurants")
+    .add(restaurant);
+
+  request.onsuccess = function(event) {
+    console.log("The restaurant has been added to the db");
+  };
+
+  request.onerror = function(event) {
+    console.log("Unable to add to the db");
+  }
+}
+/*** ./indexedDB ***/
+
+
 /**
  * Common database helper functions.
  */
@@ -14,19 +69,21 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
-    fetch(DBHelper.DATABASE_URL).then(function(res){
-      if (res.status === 200) { // Got a success response from server!
-        return res.json();
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${res.status}`);
-        callback(error, null);
-      }
-    }).then(function(res){
-      const restaurants = res;
-      callback(null, restaurants);
-    });
-  }
+static fetchRestaurants(callback) {
+  var objectStore = db.transaction("restaurants").objectStore("restaurants");
+
+  var items = [];
+  objectStore.openCursor().onsuccess = function(event) {
+    var cursor = event.target.result;
+
+    if(cursor){
+      items.push(cursor.value);
+      cursor.continue();
+    }else{
+      callback(null, items);
+    }
+  };
+}
 
   /**
    * Fetch a restaurant by its ID.
@@ -144,6 +201,9 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant, size) {
+    //If the restaurant has no photo
+    if(!restaurant.photograph) return ("https://via.placeholder.com/800x600?text=No%20Photo");
+
     //If it asks for a different size, show that size
     if(size)restaurant.photograph = restaurant.photograph.replace(/.jpg/, `_${size}.jpg`);
 
