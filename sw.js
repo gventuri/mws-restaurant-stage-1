@@ -6,6 +6,7 @@ var urlsToCache = [
   '/js/dbhelper.js',
   '/restaurant.html',
   '/css/styles.css',
+  '/css/styles.css?v=2',
   'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2',
   'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
   '/img/1.jpg',
@@ -27,7 +28,8 @@ var urlsToCache = [
   '/img/7_sm.jpg',
   '/img/8_sm.jpg',
   '/img/9_sm.jpg',
-  '/img/10_sm.jpg'
+  '/img/10_sm.jpg',
+  'https://fonts.googleapis.com'
 ];
 
 self.addEventListener('install', function(event){

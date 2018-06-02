@@ -18,7 +18,7 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map" role="application"></div>
+      <div id="map" aria-label="location" role="application"></div>
     </section>
     <section>
       <div class="filter-options-container">
@@ -26,12 +26,12 @@
           <h2 class="mb-2">Filter Results</h2>
           <div class="grid">
             <div class="col col-1-2">
-              <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+              <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select neighborhood">
                 <option value="all">All Neighborhoods</option>
               </select>
             </div>
             <div class="col col-1-2">
-              <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+              <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()"  aria-label="Select cuisine">
                 <option value="all">All Cuisines</option>
               </select>
             </div>

@@ -1,0 +1,27 @@
+{
+  "name": "restaurant-part1",
+  "version": "0.0.0",
+  "description": "The restaurant project for the Google mobile scholarship on Udacity",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gventuri/mws-restaurant-stage-1.git"
+  },
+  "keywords": [
+    "udacity",
+    "google",
+    "mws",
+    "mobile",
+    "web",
+    "development"
+  ],
+  "author": "Gabriele Venturi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gventuri/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/gventuri/mws-restaurant-stage-1#readme"
+}

@@ -23,3 +23,9 @@ In a terminal, check the version of Python you have: `python -V`. If you have Py
 ### Note about ES6
 
 Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write.
+
+
+## Project Overview: Stage 2
+
+In the second part of the project, I'm trying to link the external API ([backend](https://github.com/gventuri/mws-restaurant-stage-2), available at [https://github.com/gventuri/mws-restaurant-stage-2]https://github.com/gventuri/mws-restaurant-stage-2) with the [frontend](https://github.com/gventuri/mws-restaurant-stage-1).
+Also, I'm trying to make it fully work offline, thanks to the IndexedDB API.
