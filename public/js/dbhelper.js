@@ -1,65 +1,7 @@
-/*** IndexedDB ***/
-window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
-
-if(!window.indexedDB){
-  console.log("This browser doesn't support IndexedDB");
-}
-
-var db;
-var request = window.indexedDB.open("MyDatabase", 1);
-
-request.onerror = function(event) {
-  console.log("Error connecting to the db");
-};
-
-request.onupgradeneeded = function(event){
-  var db = event.target.result;
-  var objectStore = db.createObjectStore("restaurants", {keyPath: "name"});
-
-  fetch(DBHelper.DATABASE_URL).then(function(res){
-    if (res.status === 200) { // Got a success response from server!
-      return res.json();
-    } else { // Oops!. Got an error from server.
-      const error = (`Request failed. Returned status of ${res.status}`);
-      callback(error, null);
-    }
-  }).then(function(res){
-    const restaurants = res;
-
-    console.log(res);
-
-    for(res in restaurants){
-      add2DB(restaurants[res], db);
-    }
-
-    //Fix problem with google maps for
-    window.setTimeout(() => location.reload(), 400);
-  });
-}
-
-function add2DB(restaurant, db){
-  var request = db.transaction(["restaurants"], "readwrite")
-    .objectStore("restaurants")
-    .add(restaurant);
-
-  request.onsuccess = function(event) {
-    console.log("The restaurant has been added to the db");
-  };
-
-  request.onerror = function(event) {
-    console.log("Unable to add to the db");
-  }
-}
-/*** ./indexedDB ***/
-
-
 /**
  * Common database helper functions.
  */
 class DBHelper {
-
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -72,19 +14,30 @@ class DBHelper {
    * Fetch all restaurants.
    */
 static fetchRestaurants(callback) {
-  var objectStore = db.transaction("restaurants").objectStore("restaurants");
+  console.log("Restaurants are...", window.restaurants);
+  if(window.restaurants && window.restaurants.length){
+    callback( null, window.restaurants );
+  }else{
+    fetch(DBHelper.DATABASE_URL).then(function(res){
+      if (res.ok) { // Got a success response from server!
+        return res.json();
+      } else { // Oops!. Got an error from server.
+        console.log("Ok, error!");
+        const error = (`Request failed. Returned status of ${res.status}`);
+        callback(error, window.restaurants);
+      }
+    }).then(function(res){
+      window.restaurants = res;
 
-  var items = [];
-  objectStore.openCursor().onsuccess = function(event) {
-    var cursor = event.target.result;
+      console.log("Fetching...");
 
-    if(cursor){
-      items.push(cursor.value);
-      cursor.continue();
-    }else{
-      callback(null, items);
-    }
-  };
+      callback(null, res);
+
+      for(let restaurant in window.restaurants){
+        add2DB(window.restaurants[restaurant], window.db);
+      }
+    });
+  }
 }
 
   /**
@@ -162,6 +115,7 @@ static fetchRestaurants(callback) {
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
     DBHelper.fetchRestaurants((error, restaurants) => {
+      console.log("then", error, " - ", restaurants);
       if (error) {
         callback(error, null);
       } else {

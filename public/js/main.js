@@ -1,4 +1,4 @@
-let restaurants,
+let restaurants = [],
   neighborhoods,
   cuisines
 var map
@@ -23,27 +23,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
   //Once the db is connected
   request.onsuccess = function(event){
     db = request.result;
-    console.log("Success: "+ db);
 
-    fetchNeighborhoods();
-    fetchCuisines();
+    let objectStore = db.transaction("restaurants").objectStore("restaurants");
+    objectStore.openCursor().onsuccess = function(event) {
+      let cursor = event.target.result;
 
-    /**
-     * Initialize Google map, called from HTML.
-     */
-    window.initMap = () => {
-      let loc = {
-        lat: 40.722216,
-        lng: -73.987501
-      };
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: loc,
-        scrollwheel: false
-      });
-      updateRestaurants();
-}
+      if(cursor){
+        if(!window.restaurants) window.restaurants = [];
+        window.restaurants.push(cursor.value);
+        cursor.continue();
+      }else{
+        fetchNeighborhoods();
+        fetchCuisines();
+        updateRestaurants();
+      }
+    };
   };
+
+  /**
+   * Initialize Google map, called from HTML.
+   */
+  window.initMap = () => {
+    let loc = {
+      lat: 40.722216,
+      lng: -73.987501
+    };
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: loc,
+      scrollwheel: false
+    });
+  }
 });
 
 /**

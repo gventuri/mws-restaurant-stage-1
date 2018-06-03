@@ -27,5 +27,5 @@ Most of the code in this project has been written to the ES6 JavaScript specific
 
 ## Project Overview: Stage 2
 
-In the second part of the project, I'm trying to link the external API ([backend](https://github.com/gventuri/mws-restaurant-stage-2), available at [https://github.com/gventuri/mws-restaurant-stage-2]https://github.com/gventuri/mws-restaurant-stage-2) with the [frontend](https://github.com/gventuri/mws-restaurant-stage-1).
+In the second part of the project, I'm trying to link the external API ([backend](https://github.com/gventuri/mws-restaurant-stage-2), available at [https://github.com/gventuri/mws-restaurant-stage-2](https://github.com/gventuri/mws-restaurant-stage-2) with the [frontend](https://github.com/gventuri/mws-restaurant-stage-1).
 Also, I'm trying to make it fully work offline, thanks to the IndexedDB API.
