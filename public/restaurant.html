@@ -11,6 +11,10 @@
   <title>Restaurant Info</title>
 </head>
 <body class="inside">
+  <div class="connection-error">
+    There are some issues with your connection! You review will be uploaded shortly!
+  </div>
+
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
@@ -49,6 +53,68 @@
     <!-- Beginning reviews -->
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
+
+      <style>
+        .connection-error{
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background-color: red;
+          color: #fff;
+          font-size: 16px;
+          text-align: center;
+          z-index: 100000;
+          padding: 8px;
+          display: none;
+        }
+          input, select, textarea{
+            width: 100%;
+            padding: 5px;
+            font-size: 15px;
+            margin-bottom: 14px;
+          }
+          hr{
+            margin: 30px 0;
+          }
+          button{
+            border-radius: 5px;
+            background-color:#f90;
+            color:#fff;
+            font-size: 18px;
+            padding: 5px;
+            width: 100%;
+          }
+        </style>
+
+        <!-- Add a review -->
+        <h4 class=" h2">Your review</h4>
+        <section id="review-form">
+          <form action="#" method="POST">
+            <label>
+              Your name
+              <input type="text" name="name" id="formName">
+            </label>
+            <label>
+              Your score
+              <select name="score" id="formScore">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+              </select>
+            </label>
+            <label>
+              Your review
+              <textarea name="review" rows="10" id="formReview"></textarea>
+            </label>
+            <button type="submit">Send review</button>
+          </form>
+        </section>
+
+        <hr>
+        <!-- ./add a review -->
     </section>
     <!-- End reviews -->
 
@@ -61,6 +127,12 @@
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
   <!-- End footer -->
+
+  <!-- Jquery -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 
   <!-- Beginning scripts -->
     <script>
@@ -97,6 +169,45 @@
           window.request.onerror = function(event) {
             console.log("Unable to add to the db");
           }
+        }
+
+        /*** New review ***/
+        $("#review-form form").on("submit", ($event) => {
+          $event.preventDefault();
+
+          submitReview();
+        });
+
+        submitReview = () => {
+          const data = {
+            "restaurant_id": window.restaurant.id,
+            "name": $("#formName").val(),
+            "rating": $("#formScore").val(),
+            "comments": $("#formReview").val()
+          }
+          console.log(data);
+
+          fetch('http://localhost:1337/reviews/', {
+            method: 'POST',
+            body: JSON.stringify(data)
+          })
+          .then(function(response) {
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+            // Read the response as json.
+            return response.json();
+          })
+          .then(function(responseAsJson) {
+            // Do stuff with the JSON
+            console.log(responseAsJson);
+            window.location.reload();
+          })
+          .catch(function(error) {
+            //Show the error message, then try again
+            $(".connection-error").show();
+            window.setTimeout(submitReview(), 5000);
+          });
         }
       /*** ./indexedDB ***/
     </script>
