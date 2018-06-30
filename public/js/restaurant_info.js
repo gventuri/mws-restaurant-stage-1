@@ -18,11 +18,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
    * Initialize Google map, called from HTML.
    */
   window.initMap = () => {
+    let request = window.indexedDB.open("MyDatabase", 1);
+
+    request.onerror = function(event) {
+      console.log("Error connecting to the db");
+    };
+
+    request.onupgradeneeded = function(event){
+      window.db = event.target.result;
+      var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
+    }
+
     //Once the db is connected
     request.onsuccess = function(event){
-      db = request.result;
+      window.db = request.result;
 
-      let objectStore = db.transaction("restaurants").objectStore("restaurants");
+      let objectStore = window.db.transaction("restaurants").objectStore("restaurants");
       objectStore.openCursor().onsuccess = function(event) {
         let cursor = event.target.result;
 
@@ -101,12 +112,47 @@ fillRestaurantHTML = (restaurant = window.restaurant) => {
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
 
+  //Add the favorite button
+  let favButton = '';
+  if(restaurant.is_favorite == "true"){
+    favButton = `<button type='button' onclick='toggleFavorite(false)'>Remove from favorite</button>`;
+  }else{
+    favButton = `<button type='button' onclick='toggleFavorite(true)'>Add to favorite</button>`;
+  }
+  document.getElementById("favorite").innerHTML = favButton;
+
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
   // fill reviews
   fillReviewsHTML();
+}
+
+toggleFavorite = (bool) => {
+  console.log(`http://localhost:1337/restaurants/${window.restaurant.id}/?is_favorite=${bool?'true':'false'}`);
+
+  fetch(`http://localhost:1337/restaurants/${window.restaurant.id}/?is_favorite=${bool?'true':'false'}`, {
+    method: 'PUT'
+  }).then((res) => {
+    return res.json();
+  }).then((res) => {
+    const request =  window.db.transaction(["restaurants"], "readwrite")
+      .objectStore("restaurants")
+      .put(res);
+
+      console.log("The final res is ", res.is_favorite);
+
+      request.onsuccess = function(e){
+        console.log("ok", e);
+
+        //Refresh
+        window.location.reload();
+      };
+      request.onerror = function(e){
+          console.log('Error adding:', e);
+      };
+  });
 }
 
 /**

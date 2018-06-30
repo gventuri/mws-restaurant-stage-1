@@ -68,7 +68,7 @@
           padding: 8px;
           display: none;
         }
-          input, select, textarea{
+          input, select, textarea, button{
             width: 100%;
             padding: 5px;
             font-size: 15px;
@@ -86,6 +86,9 @@
             width: 100%;
           }
         </style>
+
+        <!-- Add to favorites-->
+        <div id="favorite"></div>
 
         <!-- Add a review -->
         <h4 class=" h2">Your review</h4>
@@ -109,7 +112,7 @@
               Your review
               <textarea name="review" rows="10" id="formReview"></textarea>
             </label>
-            <button type="submit">Send review</button>
+            <button type="button" onclick="submitReview();">Send review</button>
           </form>
         </section>
 
@@ -128,12 +131,6 @@
   </footer>
   <!-- End footer -->
 
-  <!-- Jquery -->
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-
   <!-- Beginning scripts -->
     <script>
       /*** IndexedDB ***/
@@ -143,18 +140,6 @@
 
         if(!window.indexedDB){
           console.log("This browser doesn't support IndexedDB");
-        }
-
-        let db;
-        let request = window.indexedDB.open("MyDatabase", 1);
-
-        request.onerror = function(event) {
-          console.log("Error connecting to the db");
-        };
-
-        request.onupgradeneeded = function(event){
-          window.db = event.target.result;
-          var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
         }
 
         function add2DB(restaurant, db){
@@ -171,21 +156,14 @@
           }
         }
 
-        /*** New review ***/
-        $("#review-form form").on("submit", ($event) => {
-          $event.preventDefault();
-
-          submitReview();
-        });
-
         submitReview = () => {
           const data = {
             "restaurant_id": window.restaurant.id,
-            "name": $("#formName").val(),
-            "rating": $("#formScore").val(),
-            "comments": $("#formReview").val()
+            "name": document.getElementById("formName").value,
+            "rating": document.getElementById("formScore").value,
+            "comments": document.getElementById("formReview").value
           }
-          console.log(data);
+          console.log("Data is", data);
 
           fetch('http://localhost:1337/reviews/', {
             method: 'POST',
