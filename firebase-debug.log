@@ -1,35 +1,35 @@
-[debug] [2018-07-01T09:00:34.934Z] ----------------------------------------------------------------------
-[debug] [2018-07-01T09:00:34.936Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
-[debug] [2018-07-01T09:00:34.936Z] CLI Version:   3.19.0
-[debug] [2018-07-01T09:00:34.936Z] Platform:      darwin
-[debug] [2018-07-01T09:00:34.936Z] Node Version:  v8.11.1
-[debug] [2018-07-01T09:00:34.938Z] Time:          Sun Jul 01 2018 11:00:34 GMT+0200 (CEST)
-[debug] [2018-07-01T09:00:34.938Z] ----------------------------------------------------------------------
+[debug] [2018-07-01T17:54:06.130Z] ----------------------------------------------------------------------
+[debug] [2018-07-01T17:54:06.133Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2018-07-01T17:54:06.133Z] CLI Version:   3.19.0
+[debug] [2018-07-01T17:54:06.133Z] Platform:      darwin
+[debug] [2018-07-01T17:54:06.133Z] Node Version:  v8.11.1
+[debug] [2018-07-01T17:54:06.134Z] Time:          Sun Jul 01 2018 19:54:06 GMT+0200 (CEST)
+[debug] [2018-07-01T17:54:06.134Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2018-07-01T09:00:34.960Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2018-07-01T09:00:34.960Z] > authorizing via signed-in user
-[debug] [2018-07-01T09:00:34.963Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2018-07-01T09:00:34.963Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+[debug] [2018-07-01T17:54:06.151Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-07-01T17:54:06.151Z] > authorizing via signed-in user
+[debug] [2018-07-01T17:54:06.153Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-07-01T17:54:06.153Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
  { refresh_token: '1/gx3Z66mQbmd6UcXqiGAGKvNOzt5GnsUCEA7igcMaRYE',
   client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
   client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
   grant_type: 'refresh_token',
   scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Sun Jul 01 2018 11:00:34 GMT+0200 (CEST)
-[debug] [2018-07-01T09:00:35.476Z] <<< HTTP RESPONSE 200
-[debug] [2018-07-01T09:00:35.525Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/pure-pact-195912  
+ Sun Jul 01 2018 19:54:06 GMT+0200 (CEST)
+[debug] [2018-07-01T17:54:06.702Z] <<< HTTP RESPONSE 200
+[debug] [2018-07-01T17:54:06.717Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/pure-pact-195912  
   
- Sun Jul 01 2018 11:00:35 GMT+0200 (CEST)
-[debug] [2018-07-01T09:00:36.860Z] <<< HTTP RESPONSE 200
-[debug] [2018-07-01T09:00:36.863Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/pure-pact-195912/tokens  
+ Sun Jul 01 2018 19:54:06 GMT+0200 (CEST)
+[debug] [2018-07-01T17:54:07.756Z] <<< HTTP RESPONSE 200
+[debug] [2018-07-01T17:54:07.757Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/pure-pact-195912/tokens  
   
- Sun Jul 01 2018 11:00:36 GMT+0200 (CEST)
-[debug] [2018-07-01T09:00:37.636Z] <<< HTTP RESPONSE 200
+ Sun Jul 01 2018 19:54:07 GMT+0200 (CEST)
+[debug] [2018-07-01T17:54:08.592Z] <<< HTTP RESPONSE 200
 [info] 
 [info] === Deploying to 'pure-pact-195912'...
 [info] 
 [info] i  deploying hosting
 [info] i  hosting: preparing public directory for upload...
-[debug] [2018-07-01T09:00:39.155Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/pure-pact-195912/uploads/-LGK3dLHg75ksUQoJP1i?fileCount=56&message=  
+[debug] [2018-07-01T17:54:09.891Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/pure-pact-195912/uploads/-LGLykWBokOPAcndpQjC?fileCount=59&message=  
   
- Sun Jul 01 2018 11:00:39 GMT+0200 (CEST)
+ Sun Jul 01 2018 19:54:09 GMT+0200 (CEST)
