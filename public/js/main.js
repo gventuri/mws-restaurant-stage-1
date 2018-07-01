@@ -173,7 +173,7 @@ createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant, "sm");
+  image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant, "sm"));
   image.setAttribute("alt", `Photo of the restaurant "${restaurant.name}"`)
   card.append(image);
 
@@ -196,6 +196,8 @@ createRestaurantHTML = (restaurant) => {
   more.setAttribute("alt", `More details about "${restaurant.name}"`);
   more.href = DBHelper.urlForRestaurant(restaurant);
   card.append(more)
+
+  var myLazyLoad = new LazyLoad();
 
   return li
 }

@@ -3,12 +3,12 @@
     "name": "Restaurants",
     "icons": [
         {
-            "src": "/img/icons/128x128.png",
+            "src": "/img/icons/128x128.webp",
             "type": "image/png",
             "sizes": "128x128"
         },
         {
-            "src": "/img/icons/512x512.png",
+            "src": "/img/icons/512x512.webp",
             "type": "image/png",
             "sizes": "512x512"
         }

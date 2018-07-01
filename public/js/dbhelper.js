@@ -161,9 +161,9 @@ static fetchRestaurants(callback) {
     if(!restaurant.photograph) return ("https://via.placeholder.com/800x600?text=No%20Photo");
 
     //If it asks for a different size, show that size
-    if(size)restaurant.photograph = restaurant.photograph.replace(/.jpg/, `_${size}.jpg`);
+    if(size)restaurant.photograph = restaurant.photograph.replace(/.webp/, `_${size}.webp`);
 
-    return (`/img/${restaurant.photograph}.jpg`);
+    return (`/img/${restaurant.photograph}.webp`);
   }
 
   /**

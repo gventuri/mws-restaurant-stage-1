@@ -5,6 +5,21 @@ var map;
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register("sw.js").then(function(registration){
+        document.getElementById('submitReview').addEventListener('click', () => {
+          /*
+          registration.sync.register(JSON.stringify(data)).then((reg) => {
+            console.log('sync registered');
+          }).catch(function(error){
+            console.log('Unable to fetch.');
+          });
+          */
+
+          if(navigator.onLine){
+            sendReview();
+          }else{
+            window.addEventListener('online', sendReview);
+          }
+        });
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }).catch(function(err){
         console.log('ServiceWorker registration failed: ', err);
@@ -12,6 +27,42 @@ var map;
     });
   }
 /*** ./register service workers ***/
+
+sendReview = () => {
+  if(navigator.onLine){
+    console.log("Online");
+    window.location.reload();
+  }else{
+    console.log("Offline")
+    window.addEventListener('online', () => {window.location.reload()});
+  }
+
+  const data = {
+    "restaurant_id": window.restaurant.id,
+    "name": document.getElementById("formName").value,
+    "rating": document.getElementById("formScore").value,
+    "comments": document.getElementById("formReview").value
+  }
+  fetch('http://localhost:1337/reviews/', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    // Read the response as json.
+    return response.json();
+  })
+  .then(function(responseAsJson) {
+    // Do stuff with the JSON
+    console.log(responseAsJson);
+  }).catch(function(error) {
+    console.log(error);
+  });
+
+  window.location.reload();
+}
 
 document.addEventListener('DOMContentLoaded', (event) => {
   /**
@@ -105,8 +156,8 @@ fillRestaurantHTML = (restaurant = window.restaurant) => {
   let image_lg = DBHelper.imageUrlForRestaurant(restaurant);
   let image_sm = DBHelper.imageUrlForRestaurant(restaurant, "sm");
 
-  image.src = image_sm;
-  image.setAttribute("srcset", `${image_lg} 800w, ${image_sm} 300w`);
+  image.setAttribute("data-src", image_sm);
+  image.setAttribute("data-srcset", `${image_lg} 800w, ${image_sm} 300w`);
   image.setAttribute("alt", `Photo of the restaurant "${name.innerHTML}"`);
 
   const cuisine = document.getElementById('restaurant-cuisine');
@@ -125,6 +176,9 @@ fillRestaurantHTML = (restaurant = window.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
+
+  var myLazyLoad = new LazyLoad();
+
   // fill reviews
   fillReviewsHTML();
 }

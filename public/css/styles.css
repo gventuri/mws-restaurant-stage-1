@@ -406,3 +406,35 @@ nav h1 a {
 		padding-right: 20px;
 	}
 }
+
+
+.connection-error{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: red;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  z-index: 100000;
+  padding: 8px;
+  display: none;
+}
+  input, select, textarea, button{
+    width: 100%;
+    padding: 5px;
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  hr{
+    margin: 30px 0;
+  }
+  button{
+    border-radius: 5px;
+    background-color:#f90;
+    color:#fff;
+    font-size: 18px;
+    padding: 5px;
+    width: 100%;
+  }

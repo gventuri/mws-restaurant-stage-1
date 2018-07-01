@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="theme-color" content="#fefefe">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="css/styles.css?v=2">
+  <link rel="stylesheet" href="css/styles.min.css">
   <link rel="manifest" href="/manifest.json">
   <title>Restaurant Info</title>
 </head>
 <body class="inside">
-  <div class="connection-error">
+  <div class="connection-error" id="connectionError">
     There are some issues with your connection! You review will be uploaded shortly!
   </div>
 
@@ -54,39 +54,6 @@
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
 
-      <style>
-        .connection-error{
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          background-color: red;
-          color: #fff;
-          font-size: 16px;
-          text-align: center;
-          z-index: 100000;
-          padding: 8px;
-          display: none;
-        }
-          input, select, textarea, button{
-            width: 100%;
-            padding: 5px;
-            font-size: 15px;
-            margin-bottom: 14px;
-          }
-          hr{
-            margin: 30px 0;
-          }
-          button{
-            border-radius: 5px;
-            background-color:#f90;
-            color:#fff;
-            font-size: 18px;
-            padding: 5px;
-            width: 100%;
-          }
-        </style>
-
         <!-- Add to favorites-->
         <div id="favorite"></div>
 
@@ -112,7 +79,7 @@
               Your review
               <textarea name="review" rows="10" id="formReview"></textarea>
             </label>
-            <button type="button" onclick="submitReview();">Send review</button>
+            <button type="button" id="submitReview">Send review</button>
           </form>
         </section>
 
@@ -133,6 +100,20 @@
 
   <!-- Beginning scripts -->
     <script>
+      // Connection Status
+      function isOnline() {
+        var connectionStatus = document.getElementById('connectionStatus');
+
+        if (!navigator.onLine){
+          document.getElementById('connectionError').style.display = 'block';
+        }else{
+          document.getElementById('connectionError').style.display = 'none';
+        }
+      }
+      window.addEventListener('online', isOnline);
+      window.addEventListener('offline', isOnline);
+      isOnline();
+
       /*** IndexedDB ***/
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
         window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
@@ -155,46 +136,15 @@
             console.log("Unable to add to the db");
           }
         }
-
-        submitReview = () => {
-          const data = {
-            "restaurant_id": window.restaurant.id,
-            "name": document.getElementById("formName").value,
-            "rating": document.getElementById("formScore").value,
-            "comments": document.getElementById("formReview").value
-          }
-          console.log("Data is", data);
-
-          fetch('http://localhost:1337/reviews/', {
-            method: 'POST',
-            body: JSON.stringify(data)
-          })
-          .then(function(response) {
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-            // Read the response as json.
-            return response.json();
-          })
-          .then(function(responseAsJson) {
-            // Do stuff with the JSON
-            console.log(responseAsJson);
-            window.location.reload();
-          })
-          .catch(function(error) {
-            //Show the error message, then try again
-            $(".connection-error").show();
-            window.setTimeout(submitReview(), 5000);
-          });
-        }
       /*** ./indexedDB ***/
     </script>
+    <script type="text/javascript" src="js/lazyload.min.js"></script>
     <!-- Database helpers -->
     <script type="text/javascript" src="js/dbhelper.js"></script>
     <!-- Main javascript file -->
     <script type="text/javascript" src="js/restaurant_info.js"></script>
     <!-- Google Maps -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZO7fxB9DC1sDmPqHnETdpcGCiPjEm9Og&libraries=places&callback=initMap"></script>
-  <!-- End scripts -->
+    <!-- End scripts -->
 </body>
 </html>

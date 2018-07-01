@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/gventuri/mws-restaurant-stage-1/issues"
   },
-  "homepage": "https://github.com/gventuri/mws-restaurant-stage-1#readme"
+  "homepage": "https://github.com/gventuri/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "webp-converter": "^2.1.6"
+  }
 }

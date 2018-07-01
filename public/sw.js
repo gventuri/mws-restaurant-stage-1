@@ -5,6 +5,7 @@ var urlsToCache = [
   '/js/main.js',
   '/js/restaurant_info.js',
   '/js/dbhelper.js',
+  '/js/lazyload.min.js',
   '/restaurant.html',
   '/restaurant.html?id=1',
   '/restaurant.html?id=2',
@@ -20,26 +21,26 @@ var urlsToCache = [
   '/css/styles.css?v=2',
   'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2',
   'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
-  '/img/1.jpg',
-  '/img/2.jpg',
-  '/img/3.jpg',
-  '/img/4.jpg',
-  '/img/5.jpg',
-  '/img/6.jpg',
-  '/img/7.jpg',
-  '/img/8.jpg',
-  '/img/9.jpg',
-  '/img/10.jpg',
-  '/img/1_sm.jpg',
-  '/img/2_sm.jpg',
-  '/img/3_sm.jpg',
-  '/img/4_sm.jpg',
-  '/img/5_sm.jpg',
-  '/img/6_sm.jpg',
-  '/img/7_sm.jpg',
-  '/img/8_sm.jpg',
-  '/img/9_sm.jpg',
-  '/img/10_sm.jpg'
+  '/img/1.webp',
+  '/img/2.webp',
+  '/img/3.webp',
+  '/img/4.webp',
+  '/img/5.webp',
+  '/img/6.webp',
+  '/img/7.webp',
+  '/img/8.webp',
+  '/img/9.webp',
+  '/img/10.webp',
+  '/img/1_sm.webp',
+  '/img/2_sm.webp',
+  '/img/3_sm.webp',
+  '/img/4_sm.webp',
+  '/img/5_sm.webp',
+  '/img/6_sm.webp',
+  '/img/7_sm.webp',
+  '/img/8_sm.webp',
+  '/img/9_sm.webp',
+  '/img/10_sm.webp'
 ];
 
 self.addEventListener('install', function(event){
@@ -62,3 +63,32 @@ self.addEventListener('fetch', function(event){
     )
   );
 });
+
+/*
+self.addEventListener('sync', function(event) {
+  console.log('firing: sync');
+
+  const data = JSON.parse(event.tag);
+  event.waitUntil(fetchReviews(data));
+});
+
+function fetchReviews(data)
+{
+  fetch('http://localhost:1337/reviews/', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    // Read the response as json.
+    return response.json();
+  })
+  .then(function(responseAsJson) {
+    // Do stuff with the JSON
+    console.log(responseAsJson);
+  }).catch(function(error) {
+    console.log(error);
+  });
+}*/
