@@ -319,3 +319,44 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+
+
+
+// Connection Status
+function isOnline() {
+  var connectionStatus = document.getElementById('connectionStatus');
+
+  if (!navigator.onLine){
+    document.getElementById('connectionError').style.display = 'block';
+  }else{
+    document.getElementById('connectionError').style.display = 'none';
+  }
+}
+window.addEventListener('online', isOnline);
+window.addEventListener('offline', isOnline);
+isOnline();
+
+/*** IndexedDB ***/
+  window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+  window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+  window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+
+  if(!window.indexedDB){
+    console.log("This browser doesn't support IndexedDB");
+  }
+
+  function add2DB(restaurant, db){
+    window.request = db.transaction(["restaurants"], "readwrite")
+      .objectStore("restaurants")
+      .add(restaurant);
+
+    window.request.onsuccess = function(event) {
+      console.log("The restaurant has been added to the db");
+    };
+
+    window.request.onerror = function(event) {
+      console.log("Unable to add to the db");
+    }
+  }
+/*** ./indexedDB ***/
