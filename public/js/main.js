@@ -20,6 +20,12 @@ var markers = []
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  //Load the map
+  var s = document.createElement("script");
+  s.type = "text/javascript";
+  s.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDZO7fxB9DC1sDmPqHnETdpcGCiPjEm9Og&libraries=places&callback=initMap";
+  document.head.appendChild(s);
+
   //Once the db is connected
   request.onsuccess = function(event){
     db = request.result;
@@ -215,3 +221,45 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
+
+
+
+
+
+/*** IndexedDB ***/
+window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+
+if(!window.indexedDB){
+  console.log("This browser doesn't support IndexedDB");
+}
+
+let db;
+let request = window.indexedDB.open("MyDatabase", 1);
+
+request.onerror = function(event) {
+  console.log("Error connecting to the db");
+};
+
+request.onupgradeneeded = function(event){
+  window.db = event.target.result;
+  var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
+  var objectStore2 = window.db.createObjectStore("reviews", {keyPath: "id"});
+}
+
+function add2DB(restaurant, db){
+  console.log(db);
+  window.request = db.transaction(["restaurants"], "readwrite")
+    .objectStore("restaurants")
+    .add(restaurant);
+
+  window.request.onsuccess = function(event) {
+    console.log("The restaurant has been added to the db");
+  };
+
+  window.request.onerror = function(event) {
+    console.log("Unable to add to the db");
+  }
+}
+/*** ./indexedDB ***/

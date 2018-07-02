@@ -20,7 +20,9 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map" aria-label="location" role="application"></div>
+      <div id="map" aria-label="location" role="application">
+        <img style="width:100%;height: 410px;" src="//maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&zoom=11&size=800x400&key=AIzaSyDZO7fxB9DC1sDmPqHnETdpcGCiPjEm9Og" />
+      </div>
     </section>
     <section>
       <div class="filter-options-container">
@@ -44,49 +46,9 @@
     </section>
   </main>
 
-  <script>
-    /*** IndexedDB ***/
-      window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-      window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-      window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
-
-      if(!window.indexedDB){
-        console.log("This browser doesn't support IndexedDB");
-      }
-
-      let db;
-      let request = window.indexedDB.open("MyDatabase", 1);
-
-      request.onerror = function(event) {
-        console.log("Error connecting to the db");
-      };
-
-      request.onupgradeneeded = function(event){
-        window.db = event.target.result;
-        var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
-        var objectStore2 = window.db.createObjectStore("reviews", {keyPath: "id"});
-      }
-
-      function add2DB(restaurant, db){
-        console.log(db);
-        window.request = db.transaction(["restaurants"], "readwrite")
-          .objectStore("restaurants")
-          .add(restaurant);
-
-        window.request.onsuccess = function(event) {
-          console.log("The restaurant has been added to the db");
-        };
-
-        window.request.onerror = function(event) {
-          console.log("Unable to add to the db");
-        }
-      }
-    /*** ./indexedDB ***/
-  </script>
   <script type="text/javascript" src="js/lazyload.min.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.min.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.min.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZO7fxB9DC1sDmPqHnETdpcGCiPjEm9Og&libraries=places&callback=initMap"></script>
 
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
