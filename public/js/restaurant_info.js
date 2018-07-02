@@ -29,14 +29,6 @@ var map;
 /*** ./register service workers ***/
 
 sendReview = () => {
-  if(navigator.onLine){
-    console.log("Online");
-    window.location.reload();
-  }else{
-    console.log("Offline")
-    window.addEventListener('online', () => {window.location.reload()});
-  }
-
   const data = {
     "restaurant_id": window.restaurant.id,
     "name": document.getElementById("formName").value,
@@ -57,11 +49,16 @@ sendReview = () => {
   .then(function(responseAsJson) {
     // Do stuff with the JSON
     console.log(responseAsJson);
+
+    let request = window.indexedDB.open("MyDatabase", Date.now());
+    request.onsuccess = (result) => {
+      addReview(responseAsJson, result.db);
+    }
+    
+    window.location.reload();
   }).catch(function(error) {
     console.log(error);
   });
-
-  window.location.reload();
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -77,12 +74,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     request.onupgradeneeded = function(event){
       window.db = event.target.result;
-      var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
+      const objectStore1 = window.db.createObjectStore("restaurants", {keyPath: "id"});
+      const objectStore2 = window.db.createObjectStore("reviews", {keyPath: "id"});
     }
 
     //Once the db is connected
     request.onsuccess = function(event){
-      window.db = request.result;
+      window.db = event.target.result;
 
       let objectStore = window.db.transaction("restaurants").objectStore("restaurants");
       objectStore.openCursor().onsuccess = function(event) {
@@ -108,6 +106,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
           });
         };
       }
+
+      let objectStore2 = window.db.transaction("reviews").objectStore("reviews");
+      objectStore2.openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+
+        if(cursor){
+          if(!window.reviews) window.reviews = [];
+          window.reviews.push(cursor.value);
+          cursor.continue();
+        }
+      };
     }
   }
 });
@@ -143,8 +152,9 @@ fetchRestaurantFromURL = (callback) => {
 /**
  * Create restaurant HTML and add it to the webpage
  */
-fillRestaurantHTML = (restaurant = window.restaurant) => {
-  console.log(restaurant, window.restaurant);
+fillRestaurantHTML = (restaurant) => {
+  if(!restaurant) restaurant = window.restaurant;
+  
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
@@ -233,30 +243,58 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = () => {
-  fetch('http://localhost:1337/reviews/?restaurant_id='+self.restaurant.id).then(function(res){
-    if (res.status === 200) { // Got a success response from server!
-      return res.json();
+  window.setTimeout(function(){
+    const revs = [];
+    if(window.reviews){
+      const revs = window.reviews.filter(rev => {
+        return rev.restaurant_id == window.restaurant.id;
+      });
     }
-  }).then(function(reviews){
-    console.log(reviews);
-    const container = document.getElementById('reviews-container');
-    const title = document.createElement('h4');
-    title.className += " h2";
-    title.innerHTML = 'Reviews';
-    container.appendChild(title);
 
-    if (!reviews) {
-      const noReviews = document.createElement('p');
-      noReviews.innerHTML = 'No reviews yet!';
-      container.appendChild(noReviews);
-      return;
+    if(revs && revs.length > 0){
+      console.log("dfafsdfsdfsdf", reviews);
+      _fillReviewsHTML()
+    }else{
+      console.log("NO");
+      fetch('http://localhost:1337/reviews/?restaurant_id='+window.restaurant.id).then(function(res){
+        if (res.status === 200) { // Got a success response from server!
+          return res.json();
+        }
+      }).then(function(reviews){
+        window.reviews = reviews;
+  
+        for(let review in reviews){
+          addReview(window.reviews[review], window.db);
+        }
+
+        _fillReviewsHTML()
+      });
     }
-    const ul = document.getElementById('reviews-list');
-    reviews.forEach(review => {
-      ul.appendChild(createReviewHTML(review));
-    });
-    container.appendChild(ul);
+  }, 300);
+}
+
+_fillReviewsHTML = () => {
+  const reviews = window.reviews;
+
+  console.log(reviews);
+  const container = document.getElementById('reviews-container');
+  const title = document.createElement('h4');
+  title.className += " h2";
+  title.innerHTML = 'Reviews';
+  container.appendChild(title);
+
+  if (!reviews) {
+    const noReviews = document.createElement('p');
+    noReviews.innerHTML = 'No reviews yet!';
+    container.appendChild(noReviews);
+    return;
+  }
+  const ul = document.getElementById('reviews-list');
+  reviews.forEach(review => {
+    console.log(review.restaurant_id,"and",window.restaurant.id);
+    if(review.restaurant_id  == window.restaurant.id) ul.appendChild(createReviewHTML(review));
   });
+  container.appendChild(ul);
 }
 
 /**
@@ -353,6 +391,21 @@ isOnline();
 
     window.request.onsuccess = function(event) {
       console.log("The restaurant has been added to the db");
+    };
+
+    window.request.onerror = function(event) {
+      console.log("Unable to add to the db");
+    }
+  }
+
+  function addReview(review, db){
+    console.log("Review added");
+    window.request = db.transaction(["reviews"], "readwrite")
+      .objectStore("reviews")
+      .add(review);
+
+    window.request.onsuccess = function(event) {
+      console.log("The review has been added to the db");
     };
 
     window.request.onerror = function(event) {

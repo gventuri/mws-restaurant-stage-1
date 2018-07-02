@@ -64,9 +64,11 @@
       request.onupgradeneeded = function(event){
         window.db = event.target.result;
         var objectStore = window.db.createObjectStore("restaurants", {keyPath: "id"});
+        var objectStore2 = window.db.createObjectStore("reviews", {keyPath: "id"});
       }
 
       function add2DB(restaurant, db){
+        console.log(db);
         window.request = db.transaction(["restaurants"], "readwrite")
           .objectStore("restaurants")
           .add(restaurant);
